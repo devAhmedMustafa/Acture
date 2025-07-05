@@ -1,0 +1,3 @@
+[submodule "server/lib/engine"]
+	path = server/lib/engine
+	url = https://github.com/Star-Plus/IntrastationEngine

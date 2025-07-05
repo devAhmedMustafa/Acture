@@ -1,0 +1,12 @@
+---
+title: Set Time
+---
+
+flowchart
+    start((Begin))-->setTotalTime["metaTimer = newTime"]
+    setTotalTime-->setVerseTime["currentVerse.SetTime(
+    prevStation.GetTimelapse()
+    +
+    prevStation.GetLifetime()
+    +)"]
+    setVerseTime-->End((End))

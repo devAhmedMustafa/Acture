@@ -1,0 +1,21 @@
+---
+title: GetStationById
+---
+
+flowchart
+    start((Begin))
+    start-->initialization["stationToFind = null, count = 0"]
+    initialization-->searching["RecursiveSearchById(id, root, count, stationToFind)"]
+    searching-->ifFound{"id == count"}
+    ifFound-->|T|found["stationToFind = currentStation"]
+    found-->returnStation["return stationToFind"]
+    returnStation-->End(("End"))
+    ifFound-->|F|i[i = 0]
+    i-->loop{"i < currentStation.stationsConnected.length"}
+    loop-->countUp["count++"]
+    countUp-->|"station.connectedStation[i]"|searching
+    countUp-->iIncrement["i++"]
+    iIncrement-->loop
+    loop-->|F|returnStation
+
+

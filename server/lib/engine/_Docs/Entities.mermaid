@@ -1,0 +1,25 @@
+erDiagram
+    Application
+    StationManager
+    TimeService
+    Station
+    Serializer
+    Network
+    Verse
+    DEI
+    DEO
+    Track
+    Clip
+    DataPool
+
+    Application ||--|| StationManager : accesses
+    Application ||--|| TimeService : accesses
+    Application ||--|| Serializer : accesses
+    StationManager || -- || Network : uses
+    Network || -- |{ Station : connects
+    Station || -- o{ Verse : contains
+    Verse || -- o{ Track : contains
+    Track || -- o{ Clip : contains
+    DEI || -- || DataPool : stores
+    DEO || -- || DataPool : fetches
+    TimeService || -- || Verse : manages

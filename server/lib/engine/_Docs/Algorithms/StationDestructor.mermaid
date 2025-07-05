@@ -1,0 +1,10 @@
+---
+title: Remove Station
+---
+
+flowchart
+    start((Begin))-->remove[Delete Station]
+    remove-->loopOverConnections([Loop over connections])
+    loopOverConnections-->condition{Is any connections left?}
+    condition-->|Yes|start
+    condition-->|No|End((End))

@@ -1,0 +1,13 @@
+---
+title: Data to bind from Media Binder
+---
+
+flowchart
+    start((Begin))-->getTracks["tracks = currentVerse.GetTracks()"]
+    getTracks-->loopOverTracks(["for track in tracks"])
+    loopOverTracks-->loopLimit{"Tracks > 0?"}
+    loopLimit-->|T|check{"currentVerseTimer >= currentClip.position+currentClip.length "}
+    check-->|T|bindNewClip["currentClip = nextClip"]
+    bindNewClip-->loopOverTracks
+    check-->|F|loopOverTracks
+    loopLimit-->|F|End((End))

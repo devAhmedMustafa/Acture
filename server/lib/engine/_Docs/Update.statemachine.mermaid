@@ -1,0 +1,40 @@
+stateDiagram-v2
+    state is_empty <<choice>>
+    state is_station_pause <<choice>>
+
+    [*] --> IsEmpty
+    IsEmpty --> is_empty
+    is_empty --> Empty : root.connections == 0
+    Empty --> [*]
+    is_empty --> NotEmpty : root.connections > 0
+
+    state NotEmpty {
+        [*] --> Paused
+        Paused --> Playing : Play()
+        Playing --> Paused : Pause()
+        Playing --> Stationed : Station time is up
+
+        state Stationed {
+            [*] --> is_station_pause
+            is_station_pause --> StationedPause : Station.WillPause()
+            is_station_pause --> StationedAutoPlay : !Station.WillPause()
+
+            StationedPause --> Travelling : Travel(thread)
+            StationedAutoPlay --> Travelling : Travel(thread)
+
+            state Travelling {
+                [*] --> Moving
+                Moving --> [*] : Travelled
+            }
+        }
+
+        Stationed --> Playing : Travelled
+    }
+
+%% Optional: Reverse Travel
+    Paused --> Rewinding : ReverseTravel()
+    state Rewinding {
+        [*] --> SteppingBack
+        SteppingBack --> [*] : RewindComplete
+    }
+    Rewinding --> Paused : RewindComplete

@@ -1,0 +1,18 @@
+---
+title: Sort Clips
+---
+flowchart
+    A((Start))
+    A-->structure[(Set of clips)]
+    structure-->ClipComparison[Clip comparison]
+    ClipComparison-->condition{clip1.position < clip2.position}
+    condition-->|T|sort1[clip1 before clip2]
+    condition-->|F|sort2[clip2 before clip1]
+    InsertClips[Insert clips into track]
+    sort1-->InsertClips
+    sort2-->InsertClips
+    InsertClips-->ifDone{No Clips left}
+    ifDone-->|T|done[Done]
+    ifDone-->|F|ClipComparison
+    done-->B((Stop))
+

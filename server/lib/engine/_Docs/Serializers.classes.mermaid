@@ -1,0 +1,26 @@
+classDiagram
+
+    class StationSerializeMapper {
+        + Serialize(out: stream, station: Station) void
+    }
+
+    class StationSerializer {
+        # station: Station
+        # out: stream
+
+        - SerializeBase() void
+        # SerializeBody() void = 0
+
+        + StationSerializer(station: Station, out: stream) void
+        + PerformSerialization() void
+    }
+
+    class McqSerializer {
+
+        # SerializeBody() void
+
+        + McqSerializer(station: Station, out: stream) void
+    }
+
+    McqSerializer --|> StationSerializer
+    StationSerializer -- StationSerializeMapper

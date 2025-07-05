@@ -1,0 +1,7 @@
+---
+title: Track.CalculateLength
+---
+flowchart
+    Start((Begin))
+    Start --> length["length = lastClpip.position + lastClip.clip.end - lastClip.clip.start"]
+    length --> End((return length))

@@ -1,0 +1,14 @@
+---
+title: Get Station Within Time Range
+---
+
+flowchart
+    Start(("Begin"))-->initialize["stationsFound = []"]
+    initialize-->searching["RecursiveSearchWithinTimeRange(start, end, root, stationsFound)"]
+    searching-->check{"currentStation.timelapse >= start"}
+    check-->|True|check2{"currentStation.timelapse <= end"}
+    check-->|False|loopOverConnected
+    check2-->|True|addStation["stationsFound.push(currentStation)"]
+    addStation-->loopOverConnected(["for each station in currentStation.stationsConnected"])
+    loopOverConnected-->|"currentStation.connectedStation[i]"|searching
+

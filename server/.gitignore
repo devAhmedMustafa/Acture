@@ -1,0 +1,9 @@
+.vscode
+env
+
+*.exp
+*.obj
+
+test_data
+
+__pycache__

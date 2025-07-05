@@ -1,10 +1,12 @@
 import uuid
 from fastapi import WebSocket
+from services.engine_handler import EngineHandler
 
 class Room:
     def __init__(self, room_id: str, spi_file: bytes):
         self.room_id = room_id
         self.spi_file = spi_file
+        self.engine = EngineHandler(spi_file)
         self.clients: set[WebSocket] = set()
 
 class RoomManager:
@@ -17,7 +19,12 @@ class RoomManager:
         if room_id in self.rooms:
             raise ValueError(f"Room {room_id} already exists.")
         
-        self.rooms[room_id] = Room(room_id, spi_file)
+        room = Room(room_id, spi_file)
+        self.rooms[room_id] = room
+
+        room.engine.load_spi()
+
+        return room
 
     def get_room(self, room_id: str) -> Room:
         if room_id not in self.rooms:

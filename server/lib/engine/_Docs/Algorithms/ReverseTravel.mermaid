@@ -1,9 +1,0 @@
----
-title: Reverse Travel
----
-
-flowchart
-    start((Begin))-->setNext[nextStation = prevStation]
-    setNext-->setPrevious[prevStation = history.top]
-    setPrevious-->editHistory[history.pop]
-    editHistory-->End((End))

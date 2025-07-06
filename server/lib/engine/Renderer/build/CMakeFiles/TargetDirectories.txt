@@ -1,3 +1,0 @@
-C:/Users/Ahmed Mustafa/Desktop/Star Plus Games/Intrastation Suite/IntrastationEngineWorkspace/Engine/Renderer/build/CMakeFiles/Renderer.dir
-C:/Users/Ahmed Mustafa/Desktop/Star Plus Games/Intrastation Suite/IntrastationEngineWorkspace/Engine/Renderer/build/CMakeFiles/ALL_BUILD.dir
-C:/Users/Ahmed Mustafa/Desktop/Star Plus Games/Intrastation Suite/IntrastationEngineWorkspace/Engine/Renderer/build/CMakeFiles/ZERO_CHECK.dir

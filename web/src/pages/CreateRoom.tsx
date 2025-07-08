@@ -1,6 +1,7 @@
 import { useState } from "react";
 import api from "../utils/api";
 import { useNavigate } from "react-router-dom";
+import { MeetingRole, useRoomContext } from "../context/RoomContext";
 
 interface RoomData {
     room_id: string;
@@ -10,6 +11,7 @@ export default function CreateRoom() {
     
     const [file, setFile] = useState<File | null>(null);
     const [roomData, setRoomData] = useState<RoomData|null>(null);
+    const {setRole} = useRoomContext();
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
@@ -39,6 +41,7 @@ export default function CreateRoom() {
             });
 
             setRoomData(response.data);
+            setRole(MeetingRole.HOST);
             navigate(`/room/${response.data.room_id}`);
         }
         catch (error) {

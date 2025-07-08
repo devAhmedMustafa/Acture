@@ -4,8 +4,9 @@ import { useRoomContext } from "../context/RoomContext";
 export default function useRoomWebSocket(targetRoomId: string) {
 
     const ws = useRef<WebSocket | null>(null);
-    const [messages, setMessages] = useState<string[]>([]);
+    const [messages, setMessages] = useState<any[]>([]);
     const { setRoomId } = useRoomContext();
+    const [ready, setReady] = useState(false);
 
     useEffect(() => {
 
@@ -14,17 +15,19 @@ export default function useRoomWebSocket(targetRoomId: string) {
         ws.current = new WebSocket(`ws://localhost:8000/ws/room/${targetRoomId}`);
 
         ws.current.onopen = () => {
-            console.log("WebSocket connection established");
             setRoomId(targetRoomId);
+            setReady(true);
         }
 
         ws.current.onmessage = (event) => {
-            const message = event.data;
+            const message = JSON.parse(event.data);
             setMessages((prev) => [...prev, message]);
         }
 
-        ws.current.onclose = () => {
-            console.log("WebSocket connection closed");
+        ws.current.onerror = (err) => {};
+
+        ws.current.onclose = (event) => {
+            setReady(false);
         }
 
         return () => {
@@ -33,12 +36,12 @@ export default function useRoomWebSocket(targetRoomId: string) {
 
     }, [targetRoomId])
 
-    const sendMessage = (message: string) => {
+    const sendMessage = (message: any) => {
         if (ws.current && ws.current.readyState === WebSocket.OPEN) {
-            ws.current.send(message);
+            ws.current.send(JSON.stringify(message));
         }
     }
 
-    return { messages, sendMessage };
+    return { messages, sendMessage, ready };
 
 }

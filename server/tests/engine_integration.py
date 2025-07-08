@@ -3,7 +3,7 @@ from lib.pystation import *
 
 class TestEngineIntegration(unittest.TestCase):
 
-    spi_file_path = 'C:/Users/Ahmed Mustafa/Desktop/acture-server/test_data/test.spi'
+    spi_file_path = 'C:/Users/Ahmed Mustafa/Desktop/acture-server/tests/test_data/test.spi'
 
 
     def setUp(self):

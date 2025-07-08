@@ -2,6 +2,11 @@ from fastapi import FastAPI, UploadFile, WebSocket, WebSocketDisconnect
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from services.room_manager import RoomManager
+from api import auth_controller
+from repositories.session import engine
+from models.base import Base
+
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
@@ -15,6 +20,8 @@ app.add_middleware(CORSMiddleware,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(auth_controller.router)
 
 manager = RoomManager()
 
@@ -38,6 +45,7 @@ async def host_room(spi_file: UploadFile):
 async def websocket_endpoint(websocket: WebSocket, room_id: str):
     room = manager.get_room(room_id)
     if not room:
+        await websocket.accept()
         await websocket.close(code=1003, reason="Room not found.")
         return
     
@@ -51,8 +59,8 @@ async def websocket_endpoint(websocket: WebSocket, room_id: str):
                 await websocket.close(code=1008, reason="Empty message received.")
                 continue
             
-            for client in room.clients:
-                await client.send_text(f"Message from {websocket.client.host}: {data}")
+            await manager.broadcast_message(room_id, data)
 
     except WebSocketDisconnect:
         room.clients.remove(websocket)
+

@@ -37,4 +37,15 @@ class RoomManager:
             raise ValueError(f"Room {room_id} does not exist.")
         
         del self.rooms[room_id]
+
+    async def broadcast_message(self, room_id: str, message: str):
+        if room_id not in self.rooms:
+            raise ValueError(f"Room {room_id} does not exist.")
+        
+        room = self.rooms[room_id]
+        for client in list(room.clients):
+            try:
+                await client.send_text(message)
+            except:
+                room.clients.remove(client)
         

@@ -1,48 +1,68 @@
 import { useParams } from "react-router-dom";
+import { useEffect, useMemo, useRef } from "react";
+import ChatPanel from "../components/ChatPanel";
 import useRoomWebSocket from "../hooks/useRoomWebSocket";
-import { useEffect } from "react";
+import { useVoiceMesh } from "../hooks/useVoiceMesh";
+import { v4 } from "uuid";
 
 export default function RoomPage() {
 
     const { roomId } = useParams<{ roomId: string }>();
-    const { messages, sendMessage } = useRoomWebSocket(roomId!);
+    const {sendMessage, messages, ready} = useRoomWebSocket(roomId!);
+    const selfId = useMemo(() => v4(), []);
+    // const { muted, toggleMute, announcePresence, remoteStreams } = useVoiceMesh(sendMessage, messages, selfId);
+
+    // For remote audio refs
+    const audioRefs = useRef<Record<string, HTMLAudioElement | null>>({});
 
     useEffect(() => {
         if (!roomId) {
             console.error("Room ID is required to connect to the WebSocket.");
             return;
         }
-        console.log(`Connected to room: ${roomId}`);
-    }, [roomId]);
+        if (!ready) return;
+        console.log(`Connected with : ${selfId}`);
+        // announcePresence();
+    }, [roomId, ready]);
+
+    // useEffect(() => {
+    //     // Set srcObject for each remote stream
+    //     remoteStreams.forEach((stream) => {
+    //         const audioEl = audioRefs.current[stream.id];
+    //         if (audioEl && audioEl.srcObject !== stream) {
+    //             audioEl.srcObject = stream;
+    //         }
+    //     });
+    // }, [remoteStreams]);
 
     return (
         <div>
             <h1>Room Page</h1>
             <p>This is the room page where users can interact with the room.</p>
 
-            <div className="messages">
-                <h2>Messages:</h2>
-                <ul>
-                    {messages.map((msg, index) => (
-                        <li key={index}>{msg}</li>
-                    ))}
-                </ul>
-            </div>
+            <ChatPanel roomId={roomId!} messages={messages} sendMessage={sendMessage} />
 
-            <div className="send-message">
-                <h2>Send a Message:</h2>
-                <input
-                    type="text"
-                    placeholder="Type your message here"
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter') {
-                            sendMessage((e.target as HTMLInputElement).value);
-                            (e.target as HTMLInputElement).value = '';
-                        }
-                    }}
-                    className="border border-gray-300 p-2 rounded w-full"
-                />
+            {/* <div className="mt-4 text-center">
+                <button
+                    onClick={toggleMute}
+                    className={`px-4 py-2 rounded ${muted ? 'bg-red-600' : 'bg-green-600'} text-white`}
+                >
+                    {muted ? "Unmute" : "Mute"}
+                </button>
+            </div> */}
+
+            {/* Render remote audio streams */}
+            <div>
+                {/* {remoteStreams.map((stream) => (
+                    <audio
+                        key={stream.id}
+                        ref={el => { audioRefs.current[stream.id] = el; }}
+                        autoPlay
+                        controls
+                    />
+                ))} */}
             </div>
+                
         </div>
     );
 }

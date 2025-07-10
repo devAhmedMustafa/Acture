@@ -1,11 +1,12 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './App.css'
-import { RoomProvider } from './context/RoomContext'
+import { RoomProvider } from './contexts/RoomContext'
 import CreateRoom from './pages/CreateRoom'
 import HomePage from './pages/Home'
 import RoomPage from './pages/RoomPage'
 import LoginPage from './pages/Login'
-import { AuthProvider } from './context/AuthContext'
+import { AuthProvider } from './contexts/AuthContext'
+import ProtectedRoute from './pages/ProtectedRoute'
 
 function App() {
 
@@ -15,9 +16,21 @@ function App() {
         <RoomProvider>
 
         <Routes>
-          <Route path="/" element={<HomePage/>} />
-          <Route path="/host" element={<CreateRoom />} />
-          <Route path="/room/:roomId" element={<RoomPage/>} />
+          <Route path="/" element={
+            <ProtectedRoute>
+              <HomePage/>
+            </ProtectedRoute>
+            } />
+          <Route path="/host" element={
+            <ProtectedRoute>
+              <CreateRoom/>
+            </ProtectedRoute>
+            } />
+          <Route path="/room/:roomId" element={
+            <ProtectedRoute>
+              <RoomPage/>
+            </ProtectedRoute>
+            } />
           <Route path='/login' element={<LoginPage/>} />
         </Routes>
 

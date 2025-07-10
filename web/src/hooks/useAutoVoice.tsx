@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { MeetingRole, useRoomContext } from "../context/RoomContext";
+import { MeetingRole, useRoomContext } from "../contexts/RoomContext";
 
 export function useAutoVoice(roomId: string, sendMessage: (message: any) => void, messages: any[]) {
     const { role } = useRoomContext();

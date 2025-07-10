@@ -1,5 +1,5 @@
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 import api from "../utils/api";
 
 const GOOGLE_CLIENT_ID = "441746363812-qps3ctm0hvo5m2idfrvlu6ngieud9c6i.apps.googleusercontent.com";

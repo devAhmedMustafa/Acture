@@ -1,7 +1,8 @@
 import { useState } from "react";
 import api from "../utils/api";
 import { useNavigate } from "react-router-dom";
-import { MeetingRole, useRoomContext } from "../context/RoomContext";
+import { MeetingRole, useRoomContext } from "../contexts/RoomContext";
+import { useAuth } from "../contexts/AuthContext";
 
 interface RoomData {
     room_id: string;
@@ -14,6 +15,8 @@ export default function CreateRoom() {
     const {setRole} = useRoomContext();
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+
+    const {token} = useAuth();
 
     const handleFileChange = (e: any)=> {
         const selectedFile = e.target.files?.[0];
@@ -32,11 +35,12 @@ export default function CreateRoom() {
         setLoading(true);
         const formData = new FormData();
         formData.append("spi_file", file);
-
+        
         try {
-            const response = await api.post("/host", formData, {
+            const response = await api.post("/rooms/host", formData, {
                 headers: {
                     "Content-Type": "multipart/form-data",
+                    "Authorization": `Bearer ${token}`,
                 },
             });
 

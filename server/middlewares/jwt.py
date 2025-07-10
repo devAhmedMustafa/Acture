@@ -12,7 +12,7 @@ def create_jwt_token(data: dict) -> str:
 
 def decode_jwt_token(token: str) -> dict:
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=settings.ALGORITHM)
+        payload = jwt.decode(token.replace("Bearer ", ""), settings.SECRET_KEY, algorithms=settings.ALGORITHM)
         return payload
     except JWTError:
         raise HTTPException(
@@ -20,3 +20,15 @@ def decode_jwt_token(token: str) -> dict:
             detail="Could not validate credentials",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    
+def get_current_useremail(token: str = Depends(oauth2_scheme)):
+    payload = decode_jwt_token(token)
+    email: str = payload.get("email")
+    if email is None:
+        raise HTTPException(
+            status_code=401,
+            detail="Could not validate credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    
+    return email

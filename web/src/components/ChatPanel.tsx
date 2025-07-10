@@ -1,11 +1,16 @@
 import { useState } from "react";
+import { useAuth } from "../contexts/AuthContext";
+import { useSocketContext } from "../contexts/SocketContext";
 
-export default function ChatPanel({ roomId, messages, sendMessage }: { roomId: string , messages: any[], sendMessage: (message: any) => void }) {
+export default function ChatPanel({ roomId }: { roomId: string}) {
   const [input, setInput] = useState("");
+  const { user } = useAuth();
+  const {messages, sendMessage} = useSocketContext();
 
   const handleSend = () => {
     if (input.trim() === "") return;
-    sendMessage({ type: "chat", payload: { sender: "You", text: input } });
+
+    sendMessage({ type: "chat", payload: { sender: user?.email, text: input } });
     setInput("");
   };
 
@@ -17,7 +22,7 @@ export default function ChatPanel({ roomId, messages, sendMessage }: { roomId: s
           .filter((m) => m.type === "chat")
           .map((msg, i) => (
             <div key={i} className="mb-1">
-              <strong>{msg.payload.sender}:</strong> {msg.payload.text}
+              <strong>{msg.payload.sender == user?.email ? "You" : msg.payload.sender}:</strong> {msg.payload.text}
             </div>
           ))}
       </div>

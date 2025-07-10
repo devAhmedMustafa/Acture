@@ -3,7 +3,7 @@ from lib.pystation import *
 
 class TestEngineIntegration(unittest.TestCase):
 
-    spi_file_path = 'C:/Users/Ahmed Mustafa/Desktop/acture-server/tests/test_data/test.spi'
+    spi_file_path = 'C:/Users/Ahmed Mustafa/Desktop/acture-server/server/tests/test_data/test.spi'
 
 
     def setUp(self):
@@ -42,6 +42,20 @@ class TestEngineIntegration(unittest.TestCase):
 
         self.assertIsInstance(clip, VideoClip)
 
+    def test_media_binding(self):
+        engine = Engine()
+        deserializer = StationNetworkSerializer(engine)
+        deserializer.import_spi_file(self.spi_file_path)
+        media_binder = engine.get_media_binder()
+
+        self.assertIsInstance(media_binder.get_verse(), Verse)
+
+        clips = media_binder.data_to_bind(0)
+
+        self.assertGreaterEqual(len(clips), 1)
+
+        self.assertIsInstance(clips[0], VideoClip)
+        print(clips[0].to_dict())
 
 if __name__ == '__main__':
 

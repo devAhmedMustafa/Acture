@@ -57,6 +57,17 @@ class TestEngineIntegration(unittest.TestCase):
         self.assertIsInstance(clips[0], VideoClip)
         print(clips[0].to_dict())
 
+    def test_station_channel(self):
+        engine = Engine()
+        deserializer = StationNetworkSerializer(engine)
+        deserializer.import_spi_file(self.spi_file_path)
+        engine.play()
+        engine.on_update(0)
+        channel_data = engine.receive_channel_data()
+
+        self.assertIsNotNone(channel_data)
+        self.assertIsInstance(channel_data, StationChannelSchema)
+
 if __name__ == '__main__':
 
     suite = unittest.TestLoader().loadTestsFromTestCase(TestEngineIntegration)

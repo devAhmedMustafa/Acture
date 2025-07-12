@@ -31,7 +31,12 @@ async def host_room(
     return JSONResponse(status_code=201, content={"room_id": room.room_id, "message": "Room created successfully."})
 
 @router.websocket("/join/{room_id}")
-async def websocket_endpoint(websocket: WebSocket, room_id: str, client_id: str = Query(...)):
+async def websocket_endpoint(
+    websocket: WebSocket, 
+    room_id: str, 
+    client_id: str = Query(...)
+    ):
+
     room = manager.get_room(room_id)
     if not room:
         await websocket.accept()
@@ -57,19 +62,6 @@ async def websocket_endpoint(websocket: WebSocket, room_id: str, client_id: str 
         await manager.broadcast_message(room_id, f"Client {client_id} has disconnected.")
 
 
-@router.get("/{room_id}/media")
-async def get_current_media(room_id: str):
-    room = manager.get_room(room_id)
-
-    if not room:
-        raise HTTPException(status_code=404, detail="Room not found.")
-    
-    current_media = room.get_current_media()
-
-    if not current_media:
-        raise HTTPException(status_code=404, detail="No media found in the room.")
-    
-    return JSONResponse(status_code=200, content={"current_media": current_media})
 
 @router.post("/{room_id}/traverse")
 async def virtual_traverse(
@@ -93,11 +85,11 @@ async def virtual_traverse(
     if host_email == room.host:
         return JSONResponse(status_code=403, content={"error": "Host cannot traverse."})
     
-    room.virtual_traverse(host_email, thread)
+    room.VEs[host_email].travel(thread)
     return JSONResponse(status_code=200, content={"message": "Virtual traverse successful."})
 
 
-@router.post("/{room_id}/travel")
+@router.get("/{room_id}/move")
 async def travel_in_room(
     request: Request,
     room_id: str,
@@ -119,4 +111,30 @@ async def travel_in_room(
     
     manager.broadcast_media_update(room_id)
     return JSONResponse(status_code=200, content={"message": "Travel successful."})
+
+
+@router.get("/{room_id}/trigger_station")
+async def trigger_station(
+    request: Request,
+    room_id: str,
+):
+    token = request.headers.get("Authorization")
+    if not token:
+        return JSONResponse(status_code=401, content={"error": "Authorization token is required."})
+    
+    host_email = get_current_useremail(token)
+    if not host_email:
+        return JSONResponse(status_code=403, content={"error": "Invalid or expired token."})
+    
+    room = manager.get_room(room_id)
+
+    if not room:
+        return JSONResponse(status_code=404, content={"error": "Room not found."})
+    
+    if host_email != room.host:
+        return JSONResponse(status_code=403, content={"error": "Only the host can trigger stations."})
+    
+    await manager.broadcast_station_previews(room_id)
+    return JSONResponse(status_code=200, content={"message": "Station previews triggered."})
+            
     

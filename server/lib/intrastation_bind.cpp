@@ -21,7 +21,9 @@ PYBIND11_MODULE(pystation, m) {
         .def("play", &SPI::Application::Play)
         .def("travel", &SPI::Application::Travel, py::arg("thread"))
         .def("pause", &SPI::Application::Pause)
-        .def("rewind", &SPI::Application::Rewind);
+        .def("on_update", &SPI::Application::OnUpdate, py::arg("delta_time"))
+        .def("rewind", &SPI::Application::Rewind)
+        .def("receive_channel_data", &SPI::Application::ReceiveChannelData, py::return_value_policy::reference);
 
     // Deserializers
     py::class_<SPI::StationNetworkSerializer>(m, "StationNetworkSerializer")
@@ -117,6 +119,31 @@ PYBIND11_MODULE(pystation, m) {
         .def("get_all_connected_stations", &SPI::Station::GetAllConnectedStations, py::return_value_policy::reference)
         .def("get_all_connected_verses", &SPI::Station::GetAllConnectedVerses, py::return_value_policy::reference)
         .def("get_thread_count", &SPI::Station::getThreadCount);
+
+    py::class_<SPI::StationChannelSchema, std::shared_ptr<SPI::StationChannelSchema>>(m, "StationChannelSchema")
+        .def_readwrite("station_type", &SPI::StationChannelSchema::stationType)
+        .def_readwrite("will_pause", &SPI::StationChannelSchema::willPause)
+        .def_readwrite("lifetime", &SPI::StationChannelSchema::lifetime)
+        .def("to_dict", [](const SPI::StationChannelSchema& self) {
+            return py::dict(
+                "station_type"_a = (int)self.stationType,
+                "will_pause"_a = self.willPause,
+                "lifetime"_a = self.lifetime
+            );
+        });
+
+    py::class_<SPI::McqChannelSchema, std::shared_ptr<SPI::McqChannelSchema>, SPI::StationChannelSchema>(m, "McqChannelSchema")
+        .def_readwrite("question", &SPI::McqChannelSchema::question)
+        .def_readwrite("options", &SPI::McqChannelSchema::options)
+        .def("to_dict", [](const SPI::McqChannelSchema& self) {
+            return py::dict(
+                "station_type"_a = (int)self.stationType,
+                "will_pause"_a = self.willPause,
+                "lifetime"_a = self.lifetime,
+                "question"_a = self.question,
+                "options"_a = self.options
+            );
+        });
         
 }
 

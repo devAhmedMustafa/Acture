@@ -4,6 +4,8 @@ import ChatPanel from "../components/ChatPanel";
 import {SocketProvider} from "../contexts/SocketContext";
 import api from "../utils/api";
 import MediaRenderer from "../core/MediaRenderer";
+import InteractivityRenderer from "../core/InteractivityRenderer";
+import TriggerStationButton from "../components/TriggerStationButton";
 
 export default function RoomPage() {
 
@@ -46,6 +48,8 @@ export default function RoomPage() {
                 </div>
 
                 <MediaRenderer/>
+                <InteractivityRenderer/>
+                <TriggerStationButton/>
                     
             </div>
         </SocketProvider>

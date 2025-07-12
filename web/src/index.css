@@ -1,1 +1,39 @@
 @import "tailwindcss";
+
+@theme {
+
+  /* Backgrounds */
+  --color-bg-primary: #0D1117;     /* Main background */
+  --color-bg-secondary: #161B22;   /* Cards, containers */
+  --color-bg-tertiary: #1F2630;    /* Modals, inputs, alt backgrounds */
+
+  /* Brand Colors */
+  --color-accent: #DA58D9;         /* Buttons, highlights, links */
+  --color-major: #A46EF4;          /* Primary UI components (active) */
+  --color-minor: #B38DF5;          /* Less emphasized elements */
+
+  /* Text */
+  --color-text-primary: #F0F6FC;   /* Main readable text */
+  --color-text-secondary: #C9D1D9; /* Subtext, less important text */
+  --color-text-muted: #8B949E;     /* Placeholder, disabled text */
+
+  /* Borders */
+  --color-border: #30363D;         /* Divider lines, card edges */
+  --color-border-accent: #7F2F9F;  /* For accentuated sections or buttons */
+
+  /* Interactive States */
+  --color-hover: #3C1E54;          /* Button hover (minor) */
+  --color-active: #5724A3;         /* Button active (major) */
+  --color-disabled: #2E2E3A;       /* Disabled background */
+  --color-disabled-text: #5C6370;  /* Disabled text */
+
+  /* Scrollbar */
+  --color-scroll-thumb: #2D2F3A;
+  --color-scroll-track: #15171E;
+}
+
+
+* {
+  @apply box-border;
+  color: var(--color-text-primary);
+}

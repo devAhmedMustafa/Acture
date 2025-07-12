@@ -14,7 +14,10 @@ export const SocketProvider: React.FC<{ children: React.ReactNode, targetRoomId:
 
     const ws = useRef<WebSocket | null>(null);
 
-    const [messages, setMessages] = useState<any[]>([]);
+    const [messages, setMessages] = useState<any[]>([
+        { type: "chat", payload: { sender: "System", text: "Welcome to the chat!" } },
+        { type: "chat", payload: { sender: "System", text: "Feel free to send messages." } }
+    ]);
     const [room, setRoom] = useState<string | null>(null);
     const [ready, setReady] = useState(false);
     const {user} = useAuth();

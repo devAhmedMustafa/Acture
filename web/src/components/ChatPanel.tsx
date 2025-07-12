@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useSocketContext } from "../contexts/SocketContext";
+import { Icon } from "@iconify/react"
+import ChatMessage from "./containers/ChatMessage";
 
-export default function ChatPanel({ roomId }: { roomId: string}) {
+export default function ChatPanel() {
   const [input, setInput] = useState("");
   const { user } = useAuth();
   const {messages, sendMessage} = useSocketContext();
@@ -15,31 +17,30 @@ export default function ChatPanel({ roomId }: { roomId: string}) {
   };
 
   return (
-    <div className="p-4 border rounded-lg max-w-md mx-auto bg-white shadow">
-      <h2 className="text-lg font-semibold mb-2">Room: {roomId}</h2>
-      <div className="h-48 overflow-y-auto border p-2 mb-2 rounded bg-gray-100 text-sm">
+    <div className="p-4 h-full shadow flex flex-col justify-end-safe">
+      
+      <div className="h-full overflow-y-auto p-2 mb-2 text-sm">
         {messages
           .filter((m) => m.type === "chat")
           .map((msg, i) => (
-            <div key={i} className="mb-1">
-              <strong>{msg.payload.sender == user?.email ? "You" : msg.payload.sender}:</strong> {msg.payload.text}
-            </div>
+            <ChatMessage key={i} message={msg.payload}/>
           ))}
       </div>
-      <div className="flex gap-2">
+
+      <div className="flex gap-2 border border-border py-2 px-4 rounded-xl">
         <input
           type="text"
-          className="flex-1 border rounded p-1"
-          placeholder="Type message"
+          className="flex-1 focus:outline-none"
+          placeholder="Type message..."
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleSend()}
         />
         <button
           onClick={handleSend}
-          className="bg-blue-600 text-white px-3 py-1 rounded"
+          className="bg-accent text-white p-2 rounded-full flex justify-center items-center"
         >
-          Send
+          <Icon icon="tabler:send" className="text-xl"/>
         </button>
       </div>
     </div>

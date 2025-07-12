@@ -2,7 +2,6 @@ import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import ChatPanel from "../components/ChatPanel";
 import {SocketProvider} from "../contexts/SocketContext";
-import api from "../utils/api";
 import MediaRenderer from "../core/MediaRenderer";
 import InteractivityRenderer from "../core/InteractivityRenderer";
 import TriggerStationButton from "../components/TriggerStationButton";
@@ -18,38 +17,22 @@ export default function RoomPage() {
         }
     }, [roomId]);
 
-    async function getCurrentMedia() {
-        try {
-            const res = await api.get(`/rooms/${roomId}/media`);
-
-            if (res.status !== 200) {
-                throw new Error("Failed to fetch current media");
-            }
-            
-            const curentMedia = res.data.current_media;
-
-            console.log("Current Media:", curentMedia);
-        } catch (error) {
-            console.error("Error fetching current media:", error);
-            alert("Failed to fetch current media. Please try again.");
-        }
-    }
-
     return (
         <SocketProvider targetRoomId={roomId!}>
-            <div>
-                <h1>Room Page</h1>
-                <p>This is the room page where users can interact with the room.</p>
+            <div className="grid grid-cols-1 md:grid-cols-4 h-screen bg-bg-primary">
 
-                <ChatPanel roomId={roomId!} />
+                <div className="col-span-1 md:col-span-3">
+                    <MediaRenderer/>
+                    <InteractivityRenderer/>
+                    <TriggerStationButton/>
 
-                <div>
-                    <button onClick={getCurrentMedia}>Get current media</button>
                 </div>
 
-                <MediaRenderer/>
-                <InteractivityRenderer/>
-                <TriggerStationButton/>
+                <div className="col-span-1 md:col-span-1">
+                    <ChatPanel />
+                </div>
+
+
                     
             </div>
         </SocketProvider>

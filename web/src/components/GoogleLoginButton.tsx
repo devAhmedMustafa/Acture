@@ -2,7 +2,7 @@ import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import { useAuth } from "../contexts/AuthContext";
 import api from "../utils/api";
 
-const GOOGLE_CLIENT_ID = "441746363812-qps3ctm0hvo5m2idfrvlu6ngieud9c6i.apps.googleusercontent.com";
+const GOOGLE_CLIENT_ID = "82996929328-buos29g89a364lfh2ci2ltirqs90kl3p.apps.googleusercontent.com";
 
 export default function GoogleLoginButton() {
 

@@ -19,7 +19,7 @@ export default class StationMapper {
                 throw new Error("History interactivity type is not yet implemented");
 
             default:
-                throw new Error(`Unsupported media type: ${type}`);
+                throw new Error(`Unsupported station type: ${type}`);
         }
     }
 

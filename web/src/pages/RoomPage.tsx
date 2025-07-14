@@ -5,6 +5,7 @@ import {SocketProvider} from "../contexts/SocketContext";
 import MediaRenderer from "../core/MediaRenderer";
 import InteractivityRenderer from "../core/InteractivityRenderer";
 import TriggerStationButton from "../components/TriggerStationButton";
+import MoveMediaButton from "../components/MoveMediaButton";
 
 export default function RoomPage() {
 
@@ -21,20 +22,19 @@ export default function RoomPage() {
         <SocketProvider targetRoomId={roomId!}>
             <div className="grid grid-cols-1 md:grid-cols-4 h-screen bg-gradient-to-tr from-bg-primary to-[#281d3a]">
 
-                <div className="col-span-1 md:col-span-3 grid grid-rows-6 gap-2 p-8">
+                <div className="col-span-1 md:col-span-3 grid grid-rows-8 gap-4 p-8">
 
-                    <div className="row-span-1 border">
+                    <div className="row-span-1 flex gap-3 items-center justify-center border-b border-border">
                         <TriggerStationButton/>
-
+                        <MoveMediaButton/>
                     </div>
 
-                    <div className="row-span-4">
-                        <MediaRenderer/>
-
+                    <div className="row-span-6 relative">
                         <InteractivityRenderer/>
+                        <MediaRenderer/>
                     </div>
 
-                    <div className="row-span-1 border">
+                    <div className="row-span-1">
 
                     </div>
                 </div>

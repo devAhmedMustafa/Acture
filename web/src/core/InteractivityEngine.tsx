@@ -3,22 +3,32 @@ import { useSocketContext } from "../contexts/SocketContext";
 import StationMapper from "../mappers/StationMapper";
 import { Station } from "../types/Station";
 import api from "../utils/api";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function InteractivityEngine() {
 
     const { messages, room } = useSocketContext();
     const [currentInteractivity, setCurrentInteractivity] = useState<Station|null>(null);
+    const { token } = useAuth();
 
     const takeAction = async (thread: number) => {
         try{
-            const res = await api.post(`/${room}/traverse`, {
-                thread: thread,
+            const formData = new FormData();
+            formData.append("thread", thread.toString());
+            const res = await api.post(`/rooms/${room}/traverse`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    Authorization: `Bearer ${token}`,
+                },
             })
 
             if (res.status !== 200) {
                 throw new Error("Failed to take action on interactivity");
             }
             
+            setTimeout(()=> {
+                setCurrentInteractivity(null);
+            }, 2000);
         }
         catch (error) {
             console.error("Error taking action on interactivity:", error);
@@ -30,6 +40,9 @@ export default function InteractivityEngine() {
         if (interactivityMessages.length === 0) return;
 
         const currentInteractivity = interactivityMessages[interactivityMessages.length - 1].payload;
+
+        console.log("Current interactivity:", currentInteractivity);
+
         const interactivity = StationMapper.getFromType(currentInteractivity, currentInteractivity.station_type);
 
         setCurrentInteractivity(interactivity);

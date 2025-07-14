@@ -82,9 +82,6 @@ async def virtual_traverse(
     if not room:
         return JSONResponse(status_code=404, content={"error": "Room not found."})
     
-    if host_email == room.host:
-        return JSONResponse(status_code=403, content={"error": "Host cannot traverse."})
-    
     room.VEs[host_email].travel(thread)
     return JSONResponse(status_code=200, content={"message": "Virtual traverse successful."})
 
@@ -109,7 +106,7 @@ async def travel_in_room(
     if host_email != room.host:
         return JSONResponse(status_code=403, content={"error": "Only the host can travel."})
     
-    manager.broadcast_media_update(room_id)
+    await manager.broadcast_media_update(room_id)
     return JSONResponse(status_code=200, content={"message": "Travel successful."})
 
 

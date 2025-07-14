@@ -1,8 +1,7 @@
 import { GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import { useAuth } from "../contexts/AuthContext";
 import api from "../utils/api";
-
-const GOOGLE_CLIENT_ID = "82996929328-buos29g89a364lfh2ci2ltirqs90kl3p.apps.googleusercontent.com";
+import { useEffect } from "react";
 
 export default function GoogleLoginButton() {
 
@@ -26,8 +25,12 @@ export default function GoogleLoginButton() {
         }
     }
 
+    useEffect(() => {
+        console.log(import.meta.env.VITE_GOOGLE_CLIENT_ID);
+    }, []);
+
     return (
-        <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+        <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
             <GoogleLogin
                 onSuccess={handleSuccess}
                 onError={() => {

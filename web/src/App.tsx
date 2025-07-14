@@ -7,6 +7,7 @@ import RoomPage from './pages/RoomPage'
 import LoginPage from './pages/Login'
 import { AuthProvider } from './contexts/AuthContext'
 import ProtectedRoute from './pages/ProtectedRoute'
+import { MeetingProvider } from './contexts/MeetingContext'
 
 function App() {
 
@@ -28,7 +29,9 @@ function App() {
             } />
           <Route path="/room/:roomId" element={
             <ProtectedRoute>
-              <RoomPage/>
+              <MeetingProvider>
+                <RoomPage/>
+              </MeetingProvider>
             </ProtectedRoute>
             } />
           <Route path='/login' element={<LoginPage/>} />

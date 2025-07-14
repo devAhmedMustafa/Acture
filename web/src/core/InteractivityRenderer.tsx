@@ -12,7 +12,9 @@ export default function InteractivityRenderer() {
         case StationType.MCQ:
             const mcq = currentInteractivity as MCQStation;
             return (
-                <MCQScreen question={mcq.question} options={mcq.options} handleAction={takeAction} />
+                <div className="absolute inset-0 w-full h-full bg-bg-primary">
+                    <MCQScreen question={mcq.question} options={mcq.options} handleAction={takeAction} />
+                </div>
             );
 
         default:

@@ -11,6 +11,8 @@ export default function InteractivityEngine() {
     const [currentInteractivity, setCurrentInteractivity] = useState<Station|null>(null);
     const { token } = useAuth();
 
+    const messagesChecked : any[] = messages;
+
     const takeAction = async (thread: number) => {
         try{
             const formData = new FormData();
@@ -40,8 +42,15 @@ export default function InteractivityEngine() {
         if (interactivityMessages.length === 0) return;
 
         const currentInteractivity = interactivityMessages[interactivityMessages.length - 1].payload;
+        if (messagesChecked.includes(currentInteractivity)) return;
+        messagesChecked.push(currentInteractivity);
 
         console.log("Current interactivity:", currentInteractivity);
+
+        if (!currentInteractivity) {
+            setCurrentInteractivity(null);
+            return;
+        }
 
         const interactivity = StationMapper.getFromType(currentInteractivity, currentInteractivity.station_type);
 
